@@ -35,7 +35,7 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers
-                        .xssProtection(xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.valueOf("block"))) // XSS Protection
+                        .xssProtection(xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)) // XSS Protection
                         .frameOptions(HeadersConfigurer.FrameOptionsConfig::deny) // Clickjacking Protection
                         .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'")) // CSP básico
                         .httpStrictTransportSecurity(hsts -> hsts.maxAgeInSeconds(31536000).includeSubDomains(true)) // HSTS
