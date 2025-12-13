@@ -3,9 +3,6 @@ spring:
     active: ${PROFILE_ACTIVE:default}
   application:
     name: news-letter-ai
-  jpa:
-    hibernate:
-      ddl-auto: update
   mail:
     host: smtp.gmail.com
     port: 587
