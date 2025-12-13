@@ -7,15 +7,13 @@ import com.lucasmoraist.news_letter_ai.domain.model.Notice;
 
 import java.util.List;
 
-public record SendNotification(CustomerPersistence customerPersistence, NotificationGateway notificationService) {
+public record SendNotification(CustomerPersistence customerPersistence, NotificationGateway notificationGateway) {
 
     public void execute(List<Notice> notices) {
         List<Customer> customers = customerPersistence.findAllCustomers();
 
         customers.forEach(customer ->
-                notices.forEach(notice ->
-                        notificationService.sendNotification(customer.email(), notice)
-                )
+                notificationGateway.sendNotification(customer.email(), notices)
         );
     }
 
