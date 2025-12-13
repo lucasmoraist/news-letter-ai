@@ -1,5 +1,7 @@
 package com.lucasmoraist.news_letter_ai.domain.model;
 
+import com.lucasmoraist.news_letter_ai.domain.enums.GenderEnum;
+
 import java.util.UUID;
 
 public record Customer(
@@ -7,6 +9,6 @@ public record Customer(
         String name,
         String email,
         String phoneNumber,
-        String gender,
+        GenderEnum gender,
         Boolean isActive
 ) {}

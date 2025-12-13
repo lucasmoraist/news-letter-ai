@@ -1,7 +1,10 @@
 package com.lucasmoraist.news_letter_ai.infrastructure.database.entity;
 
+import com.lucasmoraist.news_letter_ai.domain.enums.GenderEnum;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,7 +30,8 @@ public class CustomerEntity {
     @Column(unique = true)
     private String email;
     private String phoneNumber;
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private GenderEnum gender;
     private Boolean isActive;
 
 }
