@@ -13,6 +13,10 @@ import java.util.Collections;
 
 @Log4j2
 @Service
+@Retryable(
+        delay = 10000,
+        maxRetries = 5
+)
 public class GeminiService {
 
     private final Client client;
@@ -21,16 +25,11 @@ public class GeminiService {
         this.client = client;
     }
 
-    @Retryable(
-            delay = 10000,
-            maxRetries = 5
-    )
     @Cacheable(
             value = "gemini-investment-news",
             key = "'daily-news'"
     )
-    public String generateContent() {
-        log.debug("Creating prompt for Gemini model...");
+    public String generateNotices() {
         final String prompt = """
             Busque exatamente 5 notícias completas, publicadas no dia anterior, relacionadas ao tema investimentos (mercado financeiro, renda fixa, renda variável, economia, juros, bolsa de valores, fundos de investimento, CDI, SELIC, Tesouro Direto, etc.).
             
@@ -64,6 +63,60 @@ public class GeminiService {
             ]
             """;
 
+        GenerateContentResponse response = sendRequestToGemini(prompt);
+
+        return response.text();
+    }
+
+
+    @Cacheable(
+            value = "gemini-investment-news-subject",
+            key = "'daily-news'"
+    )
+    public String generateSubject(String notices) {
+        final String prompt = """            
+            Com base nas noticias a seguir crie **apenas 1 título** chamativo e intrigante para adicionar no título do email 
+            
+            - Retorne como String
+            - Não inclua nenhuma explicação, prefácio ou pontuação extra.
+            
+            Notícias em JSON:
+            {{NOTICES}}
+            """;
+
+        final String promptWithNotices = prompt.replace("{{NOTICES}}", notices);
+
+        GenerateContentResponse response = sendRequestToGemini(promptWithNotices);
+
+        return response.text();
+    }
+
+    @Cacheable(
+            value = "gemini-investment-news-introduction",
+            key = "'daily-news'"
+    )
+    public String generateIntroduction(String notices) {
+        final String prompt = """            
+            Com base nas noticias a seguir crie uma introdução curta e envolvente para o email de newsletter sobre investimentos.
+            
+            - A introdução deve ser persuasiva e incentivar a leitura do restante do conteúdo.
+            - Utilize uma linguagem acessível e amigável, adequada para um público interessado em investimentos.
+            - Mantenha a introdução entre 2 a 3 frases curtas.
+            - Não inclua nenhuma explicação, prefácio ou pontuação extra.
+            
+            Notícias em JSON:
+            {{NOTICES}}
+            """;
+
+        final String promptWithNotices = prompt.replace("{{NOTICES}}", notices);
+
+        GenerateContentResponse response = sendRequestToGemini(promptWithNotices);
+
+        return response.text();
+    }
+
+    private GenerateContentResponse sendRequestToGemini(String prompt) {
+        log.debug("Preparing request to Gemini model...");
 
         Content content = Content.builder()
                 .role("user")
@@ -79,7 +132,7 @@ public class GeminiService {
                 );
         log.debug("Received response from Gemini model.");
 
-        return response.text();
+        return response;
     }
 
 }
