@@ -27,11 +27,10 @@ public class DailySchedule {
     public void execute() {
         log.info("Initiating daily newsletter generation process...");
 
-        String generatedContent = geminiService.generateContent()
+        String generatedContent = geminiService.generateNotices()
                 .replace("```json", "")
                 .replace("```", "")
                 .trim();
-        log.debug("Generated content: {}", generatedContent);
 
         try {
             List<Notice> notices = objectMapper.readValue(generatedContent, new TypeReference<>() {});
