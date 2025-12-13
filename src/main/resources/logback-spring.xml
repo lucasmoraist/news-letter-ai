@@ -17,7 +17,7 @@
             <charset>UTF-8</charset>
         </encoder>
     </appender>
-    <springProfile name="default | dev | pre | prod">
+    <springProfile name="default | cloud">
         <root level="INFO">
             <appender-ref ref="JsonConsoleAppender"/>
         </root>
