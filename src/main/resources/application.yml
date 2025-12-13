@@ -14,3 +14,8 @@ spring:
 logging:
   level:
     com.lucasmoraist: DEBUG
+
+secrets:
+  google:
+    genai:
+      api-key: ${SECRETS_GOOGLE_GENAI_API_KEY}
