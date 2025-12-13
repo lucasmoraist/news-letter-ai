@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lucasmoraist.news_letter_ai.application.usecases.notification.SendNotification;
-import com.lucasmoraist.news_letter_ai.domain.exceptions.ContentException;
+import com.lucasmoraist.news_letter_ai.domain.exceptions.ReadValueException;
 import com.lucasmoraist.news_letter_ai.domain.model.Notice;
 import com.lucasmoraist.news_letter_ai.infrastructure.genai.GeminiService;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class DailySchedule {
             this.sendNotification.execute(notices);
         } catch (JsonProcessingException e) {
             log.error("Error parsing generated content: {}", e.getMessage());
-            throw new ContentException("Failed to parse generated content into notices.", e);
+            throw new ReadValueException("Failed to parse generated content into notices.", e);
         }
     }
 
