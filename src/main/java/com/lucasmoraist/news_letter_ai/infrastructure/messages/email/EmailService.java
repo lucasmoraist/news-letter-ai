@@ -1,6 +1,6 @@
 package com.lucasmoraist.news_letter_ai.infrastructure.messages.email;
 
-import com.lucasmoraist.news_letter_ai.domain.exceptions.ContentException;
+import com.lucasmoraist.news_letter_ai.domain.exceptions.EmailException;
 import com.lucasmoraist.news_letter_ai.domain.model.Notice;
 import com.lucasmoraist.news_letter_ai.infrastructure.genai.GeminiService;
 import com.lucasmoraist.news_letter_ai.infrastructure.messages.utils.BodyTemplate;
@@ -42,7 +42,7 @@ public class EmailService {
             log.info("Email sent successfully to {}", userEmail);
         } catch (MessagingException e) {
             log.error("Failed to send email to {}: {}", userEmail, e.getMessage());
-            throw new ContentException("Failed to send email to " + userEmail, e);
+            throw new EmailException("Failed to send email to " + userEmail, e);
         }
     }
 
