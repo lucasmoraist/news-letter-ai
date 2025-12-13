@@ -1,11 +1,8 @@
 spring:
+  profiles:
+    active: ${PROFILE_ACTIVE:default}
   application:
     name: news-letter-ai
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password: password
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
@@ -24,9 +21,18 @@ spring:
 
 logging:
   level:
-    com.lucasmoraist: DEBUG
+    com.lucasmoraist: ${LOG_LEVEL}
 
 secrets:
   google:
     genai:
       api-key: ${SECRETS_GOOGLE_GENAI_API_KEY}
+
+app:
+  security-ignore:
+    actuatorHealth: /actuator/health
+    actuatorLiveness: /actuator/health/liveness
+    actuatorReadiness: /actuator/health/readiness
+    customerSave: /api/v1/customer/save
+  allowed-origins:
+    - http://localhost:3000
