@@ -1,5 +1,6 @@
 package com.lucasmoraist.news_letter_ai.infrastructure.security;
 
+import com.lucasmoraist.news_letter_ai.infrastructure.filter.RateLimiterFilter;
 import com.lucasmoraist.news_letter_ai.infrastructure.security.properties.AppProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +10,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -24,11 +28,18 @@ import java.util.Optional;
 public class SecurityConfig {
 
     private final AppProperties appProperties;
+    private final RateLimiterFilter rateLimiterFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
+                .headers(headers -> headers
+                        .xssProtection(xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.valueOf("block"))) // XSS Protection
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::deny) // Clickjacking Protection
+                        .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self'")) // CSP básico
+                        .httpStrictTransportSecurity(hsts -> hsts.maxAgeInSeconds(31536000).includeSubDomains(true)) // HSTS
+                )
                 .authorizeHttpRequests(auth -> Optional
                         .ofNullable(appProperties.getSecurityIgnore())
                         .map(Map::values)
@@ -39,6 +50,7 @@ public class SecurityConfig {
                                 () -> auth.anyRequest().authenticated()
                         )
                 )
+                .addFilterBefore(rateLimiterFilter, SecurityContextHolderFilter.class)
                 .build();
     }
 
@@ -50,7 +62,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(List.of("http://localhost:300"));
+
+        List<String> allowedOrigins = Optional.ofNullable(appProperties.getAllowedOrigins())
+                .orElse(List.of());
+
+        List<String> cleanOrigins = allowedOrigins.stream()
+                .map(origin -> origin.endsWith("/") ? origin.substring(0, origin.length() - 1) : origin)
+                .toList();
+
+        configuration.setAllowedOrigins(cleanOrigins);
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setExposedHeaders(List.of("Authorization"));
