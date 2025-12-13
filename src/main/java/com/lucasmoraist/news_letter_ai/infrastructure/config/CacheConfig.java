@@ -14,7 +14,11 @@ public class CacheConfig {
     @Bean
     public CacheManager cacheManager() {
         CaffeineCacheManager cacheManager =
-                new CaffeineCacheManager("gemini-investment-news");
+                new CaffeineCacheManager(
+                        "gemini-investment-news",
+                        "gemini-investment-news-subject",
+                        "gemini-investment-news-introduction"
+                );
 
         cacheManager.setCaffeine(
                 Caffeine.newBuilder()
