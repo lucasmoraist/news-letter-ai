@@ -25,14 +25,18 @@ public class EmailService {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public void sendNotice(String userEmail, String subject, List<Notice> notices) {
+        String noticesAsString = objectMapper.writeValueAsString(notices);
+        String introduction = geminiService.generateIntroduction(noticesAsString);
+
+        String emailBody = BodyTemplate.buildEmail(notices, introduction);
+
+        this.sendEmail(userEmail, subject, emailBody);
+    }
+
+    private void sendEmail(String userEmail, String subject, String emailBody) {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
-            String noticesAsString = objectMapper.writeValueAsString(notices);
-            String introduction = geminiService.generateIntroduction(noticesAsString);
-
-            String emailBody = BodyTemplate.buildEmail(notices, introduction);
 
             helper.setTo(userEmail);
             helper.setSubject(subject);
