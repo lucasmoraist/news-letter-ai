@@ -1,6 +1,6 @@
 package com.lucasmoraist.news_letter_ai.infrastructure.security;
 
-import com.lucasmoraist.news_letter_ai.infrastructure.filter.RateLimiterFilter;
+import com.lucasmoraist.news_letter_ai.infrastructure.web.filter.RateLimiterFilter;
 import com.lucasmoraist.news_letter_ai.infrastructure.security.properties.AppProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

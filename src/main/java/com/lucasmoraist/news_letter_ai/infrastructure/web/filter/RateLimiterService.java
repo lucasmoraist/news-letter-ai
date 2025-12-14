@@ -1,4 +1,4 @@
-package com.lucasmoraist.news_letter_ai.infrastructure.filter;
+package com.lucasmoraist.news_letter_ai.infrastructure.web.filter;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -27,9 +27,8 @@ public class RateLimiterService {
     public void tryAcquire(HttpServletRequest request) {
         String clientIp = getClientIp(request);
 
-        int currentCount = requestCountsCache.asMap().compute(clientIp, (key, count) -> {
-            return (count == null) ? 1 : count + 1;
-        });
+        int currentCount = requestCountsCache.asMap().compute(clientIp,
+                (key, count) -> (count == null) ? 1 : count + 1);
 
         if (currentCount > MAX_REQUESTS) {
             throw new ResponseStatusException(

@@ -1,4 +1,4 @@
-package com.lucasmoraist.news_letter_ai.infrastructure.filter;
+package com.lucasmoraist.news_letter_ai.infrastructure.web.filter;
 
 import com.lucasmoraist.news_letter_ai.domain.exceptions.RateLimiterException;
 import jakarta.servlet.FilterChain;
