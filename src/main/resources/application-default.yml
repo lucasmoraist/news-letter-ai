@@ -13,3 +13,7 @@ spring:
 logging:
   level:
     com.lucasmoraist: DEBUG
+
+app:
+  security-ignore:
+    sentNotice: /api/v1/notices/sent
