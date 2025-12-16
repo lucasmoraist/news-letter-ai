@@ -6,3 +6,6 @@ spring:
     password: ${JDBC_DATABASE_PASSWORD}
   jpa:
     show-sql: false
+    properties:
+      hibernate:
+        ddl-auto: update
