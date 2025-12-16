@@ -4,8 +4,8 @@ spring:
   application:
     name: news-letter-ai
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: smtp.hostinger.com
+    port: 465
     username: ${JSM_EMAIL}
     password: ${JSM_PASSWORD}
     properties:
@@ -13,6 +13,8 @@ spring:
         smtp:
           auth: true
           starttls:
+            enable: false
+          ssl:
             enable: true
 
 logging:

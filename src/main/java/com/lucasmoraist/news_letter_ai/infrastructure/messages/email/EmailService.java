@@ -8,6 +8,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,9 @@ public class EmailService {
     private final GeminiService geminiService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    @Value("${spring.mail.username}") // Adicione esta linha
+    private String senderEmail;
+
     public void sendNotice(String userEmail, String subject, List<Notice> notices) {
         String noticesAsString = objectMapper.writeValueAsString(notices);
         String introduction = geminiService.generateIntroduction(noticesAsString);
@@ -38,6 +42,7 @@ public class EmailService {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
+            helper.setFrom(senderEmail);
             helper.setTo(userEmail);
             helper.setSubject(subject);
             helper.setText(emailBody, true);
