@@ -31,12 +31,11 @@ secrets:
       api-key: ${SECRETS_GOOGLE_GENAI_API_KEY}
 
 app:
-  security:
-    enabled: ${APP_SECURITY_ENABLED:true}
   security-ignore:
     actuatorHealth: /actuator/health
     actuatorLiveness: /actuator/health/liveness
     actuatorReadiness: /actuator/health/readiness
     customerSave: /api/v1/customer/save
+    sendEmailTest: /api/test-email
   allowed-origins:
     - http://localhost:3000
