@@ -23,6 +23,7 @@ logging:
 
 secrets:
   brevo:
+    sender-email: ${JSM_EMAIL}
     api-url: https://api.brevo.com/v3
     api-key: ${SECRETS_BREVO_API_KEY}
   google:

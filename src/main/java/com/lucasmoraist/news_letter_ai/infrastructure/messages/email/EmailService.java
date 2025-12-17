@@ -25,7 +25,7 @@ public class EmailService {
     private final GeminiService geminiService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Value("${spring.mail.username}")
+    @Value("${secrets.brevo.sender-email}")
     private String senderEmail;
 
     public void sendNotice(String userEmail, String subject, List<Notice> notices) {
