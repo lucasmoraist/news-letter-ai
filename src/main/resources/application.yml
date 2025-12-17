@@ -3,28 +3,19 @@ spring:
     active: ${PROFILE_ACTIVE:default}
   application:
     name: news-letter-ai
-  mail:
-    host: smtp.hostinger.com
-    port: 465
-    username: ${JSM_EMAIL}
-    password: ${JSM_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: false
-          ssl:
-            enable: true
 
 logging:
   level:
-    com.lucasmoraist: ${LOG_LEVEL}
+    com.lucasmoraist: ${LOG_LEVEL:DEBUG}
 
 secrets:
+  brevo:
+    sender-email: ${JSM_EMAIL:johndoe@example.com}
+    api-url: https://api.brevo.com/v3
+    api-key: ${SECRETS_BREVO_API_KEY:123456789abcdef}
   google:
     genai:
-      api-key: ${SECRETS_GOOGLE_GENAI_API_KEY}
+      api-key: ${SECRETS_GOOGLE_GENAI_API_KEY:123456789abcdef}
 
 app:
   security-ignore:

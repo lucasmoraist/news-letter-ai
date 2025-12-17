@@ -2,18 +2,18 @@ package com.lucasmoraist.news_letter_ai.infrastructure.messages.email;
 
 import com.lucasmoraist.news_letter_ai.domain.exceptions.EmailException;
 import com.lucasmoraist.news_letter_ai.domain.model.Notice;
+import com.lucasmoraist.news_letter_ai.infrastructure.client.BrevoFeignClient;
 import com.lucasmoraist.news_letter_ai.infrastructure.genai.GeminiService;
+import com.lucasmoraist.news_letter_ai.infrastructure.messages.dto.BrevoDtos;
 import com.lucasmoraist.news_letter_ai.infrastructure.messages.utils.BodyTemplate;
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
 
+import java.util.Collections;
 import java.util.List;
 
 @Log4j2
@@ -21,11 +21,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmailService {
 
-    private final JavaMailSender javaMailSender;
+    private final BrevoFeignClient brevoFeignClient;
     private final GeminiService geminiService;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Value("${spring.mail.username}") // Adicione esta linha
+    @Value("${secrets.brevo.sender-email}")
     private String senderEmail;
 
     public void sendNotice(String userEmail, String subject, List<Notice> notices) {
@@ -38,19 +38,23 @@ public class EmailService {
     }
 
     private void sendEmail(String userEmail, String subject, String emailBody) {
+        BrevoDtos.SendSmtpEmailRequest requestBody = BrevoDtos.SendSmtpEmailRequest.builder()
+                .sender(BrevoDtos.Sender.builder().email(senderEmail).build())
+                .to(Collections.singletonList(BrevoDtos.Recipient.builder().email(userEmail).build()))
+                .subject(subject)
+                .htmlContent(emailBody)
+                .build();
+
         try {
-            MimeMessage message = javaMailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+            brevoFeignClient.sendTransactionalEmail(requestBody);
 
-            helper.setFrom(senderEmail);
-            helper.setTo(userEmail);
-            helper.setSubject(subject);
-            helper.setText(emailBody, true);
-
-            javaMailSender.send(message);
             log.info("Email sent successfully to {}", userEmail);
-        } catch (MessagingException e) {
-            log.error("Failed to send email to {}: {}", userEmail, e.getMessage());
+        } catch (FeignException e) {
+            log.error("Failed to send email to {} via Brevo API: Status={}, Message={}",
+                    userEmail, e.status(), e.contentUTF8());
+            throw new EmailException("Failed to send email to " + userEmail, e);
+        } catch (Exception e) {
+            log.error("An unexpected error occurred while sending email to {}: {}", userEmail, e.getMessage());
             throw new EmailException("Failed to send email to " + userEmail, e);
         }
     }
