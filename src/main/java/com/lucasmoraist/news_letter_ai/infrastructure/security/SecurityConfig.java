@@ -3,6 +3,7 @@ package com.lucasmoraist.news_letter_ai.infrastructure.security;
 import com.lucasmoraist.news_letter_ai.infrastructure.web.filter.RateLimiterFilter;
 import com.lucasmoraist.news_letter_ai.infrastructure.security.properties.AppProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,11 +28,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+    @Value("${app.security.enabled:true}")
+    private boolean securityIsEnabled;
     private final AppProperties appProperties;
     private final RateLimiterFilter rateLimiterFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+        if (!securityIsEnabled) {
+            appProperties.getSecurityIgnore().computeIfAbsent(
+                    "sendEmailTest", k -> "/api/test-email"
+            );
+        }
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .headers(headers -> headers
