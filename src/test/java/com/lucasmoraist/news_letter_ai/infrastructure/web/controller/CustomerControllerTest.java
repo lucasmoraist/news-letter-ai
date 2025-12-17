@@ -1,6 +1,7 @@
 package com.lucasmoraist.news_letter_ai.infrastructure.web.controller;
 
 import com.lucasmoraist.news_letter_ai.application.usecases.customer.CreateCustomerCase;
+import com.lucasmoraist.news_letter_ai.domain.enums.GenderEnum;
 import com.lucasmoraist.news_letter_ai.infrastructure.web.dto.CustomerDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ class CustomerControllerTest {
                 "John Doe",
                 "johndoe@email.com",
                 "1234567890",
-                "MALE"
+                GenderEnum.MALE
         );
 
         mockMvc.perform(post("/api/v1/customer/save")

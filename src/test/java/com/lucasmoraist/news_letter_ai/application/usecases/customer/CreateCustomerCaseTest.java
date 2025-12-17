@@ -2,6 +2,7 @@ package com.lucasmoraist.news_letter_ai.application.usecases.customer;
 
 import com.lucasmoraist.news_letter_ai.application.gateway.CustomerPersistence;
 import com.lucasmoraist.news_letter_ai.application.mapper.CustomerMapper;
+import com.lucasmoraist.news_letter_ai.domain.enums.GenderEnum;
 import com.lucasmoraist.news_letter_ai.domain.model.Customer;
 import com.lucasmoraist.news_letter_ai.infrastructure.web.dto.CustomerDTO;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +30,7 @@ class CreateCustomerCaseTest {
                 "John Doe",
                 "johndoe@email.com",
                 "1234567890",
-                "MALE"
+                GenderEnum.MALE
         );
         Customer customer = CustomerMapper.toDomain(dto);
 

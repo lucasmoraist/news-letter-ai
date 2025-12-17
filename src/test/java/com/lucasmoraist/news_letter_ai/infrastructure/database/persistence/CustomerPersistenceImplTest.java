@@ -2,6 +2,7 @@ package com.lucasmoraist.news_letter_ai.infrastructure.database.persistence;
 
 import com.lucasmoraist.news_letter_ai.application.gateway.CustomerPersistence;
 import com.lucasmoraist.news_letter_ai.application.mapper.CustomerMapper;
+import com.lucasmoraist.news_letter_ai.domain.enums.GenderEnum;
 import com.lucasmoraist.news_letter_ai.domain.exceptions.UniqueException;
 import com.lucasmoraist.news_letter_ai.domain.model.Customer;
 import com.lucasmoraist.news_letter_ai.infrastructure.database.repository.CustomerRepository;
@@ -41,7 +42,7 @@ class CustomerPersistenceImplTest {
                 "John Doe",
                 "johndoe@email.com",
                 "1234567890",
-                "MALE"
+                GenderEnum.MALE
         );
         Customer customer = CustomerMapper.toDomain(dto);
 
@@ -62,7 +63,7 @@ class CustomerPersistenceImplTest {
                 "John Doe",
                 "johndoe@email.com",
                 "1234567890",
-                "MALE"
+                GenderEnum.MALE
         );
         Customer customer = CustomerMapper.toDomain(dto);
         persistence.saveCustomer(customer);
@@ -79,7 +80,7 @@ class CustomerPersistenceImplTest {
                 "John Doe",
                 "johndoe@email.com",
                 "1234567890",
-                "MALE"
+                GenderEnum.MALE
         );
         Customer customer = CustomerMapper.toDomain(dto);
         persistence.saveCustomer(customer);
