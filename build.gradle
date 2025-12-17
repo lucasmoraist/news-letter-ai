@@ -64,7 +64,7 @@ dependencies {
 
 	// Java Mail
 // 	implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'com.sun.mail:jakarta.mail:2.1.1'
+//     implementation 'com.sun.mail:jakarta.mail:2.1.1'
 
 	// GenAI
 	implementation 'com.google.genai:google-genai:1.0.0'
