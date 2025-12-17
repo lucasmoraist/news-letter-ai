@@ -3,19 +3,6 @@ spring:
     active: ${PROFILE_ACTIVE:default}
   application:
     name: news-letter-ai
-#  mail:
-#    host: smtp.hostinger.com
-#    port: 465
-#    username: ${JSM_EMAIL}
-#    password: ${JSM_PASSWORD}
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: false
-#          ssl:
-#            enable: true
 
 logging:
   level:
@@ -36,6 +23,5 @@ app:
     actuatorLiveness: /actuator/health/liveness
     actuatorReadiness: /actuator/health/readiness
     customerSave: /api/v1/customer/save
-    sendEmailTest: /api/test-email
   allowed-origins:
     - http://localhost:3000
