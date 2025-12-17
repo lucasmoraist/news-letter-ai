@@ -1,11 +1,15 @@
 package com.lucasmoraist.news_letter_ai.infrastructure.web.dto;
 
 import com.lucasmoraist.news_letter_ai.domain.enums.GenderEnum;
+import com.lucasmoraist.news_letter_ai.domain.enums.ThemeEnum;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 public record CustomerDTO(
         @NotBlank(message = "Name is mandatory")
@@ -19,7 +23,9 @@ public record CustomerDTO(
                 message = "Phone number should be a valid format (e.g., (11) 99999-9999)")
         String phoneNumber,
         @NotNull(message = "Gender is mandatory")
-        GenderEnum gender
+        GenderEnum gender,
+        @NotEmpty(message = "At least one theme must be selected")
+        List<ThemeEnum> desiredThemes
 ) {
 
 }
