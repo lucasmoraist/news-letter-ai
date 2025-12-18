@@ -22,7 +22,9 @@ public class CustomerController implements CustomerRoutes {
         log.debug("Received request to save customer");
         Customer customer = CustomerMapper.toDomain(customerDTO);
         this.createCustomerCase.execute(customer);
-        return ResponseEntity.status(201).build();
+        return ResponseEntity.status(302)
+                .header("Location", "/register?success")
+                .build();
     }
 
 }
