@@ -6,7 +6,7 @@ plugins {
 }
 
 group = 'com.lucasmoraist'
-version = '0.2.0-SNAPSHOT'
+version = '0.1.0-SNAPSHOT'
 description = 'A micro-SaaS application designed to share news prompted by an AI.'
 
 java {
@@ -26,7 +26,7 @@ repositories {
 }
 
 ext {
-  set('springCloudVersion', "2025.1.0")
+  set('springCloudVersion', "2025.0.0")
 }
 
 
