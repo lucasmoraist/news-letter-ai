@@ -4,20 +4,20 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
-    username: sa
-    password: password
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
-
 
 logging:
   level:
     com.lucasmoraist: DEBUG
 
-app:
-  security-ignore:
-    sentNotice: /api/v1/notices/sent
+secrets:
+  brevo:
+    sender-email: johndoe@example.com
+    api-url: https://api.brevo.com/v3
+    api-key: 123456789-test-api-key
+  google:
+    genai:
+      api-key: $123456789-test-google-genai-api-key

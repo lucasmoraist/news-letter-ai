@@ -10,12 +10,12 @@ logging:
 
 secrets:
   brevo:
-    sender-email: ${JSM_EMAIL:johndoe@example.com}
+    sender-email: ${JSM_EMAIL}
     api-url: https://api.brevo.com/v3
-    api-key: ${SECRETS_BREVO_API_KEY:123456789abcdef}
+    api-key: ${SECRETS_BREVO_API_KEY}
   google:
     genai:
-      api-key: ${SECRETS_GOOGLE_GENAI_API_KEY:123456789abcdef}
+      api-key: ${SECRETS_GOOGLE_GENAI_API_KEY}
 
 app:
   security-ignore:
@@ -23,5 +23,3 @@ app:
     actuatorLiveness: /actuator/health/liveness
     actuatorReadiness: /actuator/health/readiness
     customerSave: /api/v1/customer/save
-  allowed-origins:
-    - http://localhost:3000
