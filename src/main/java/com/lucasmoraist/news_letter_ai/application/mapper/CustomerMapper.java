@@ -2,7 +2,9 @@ package com.lucasmoraist.news_letter_ai.application.mapper;
 
 import com.lucasmoraist.news_letter_ai.domain.exceptions.ContentException;
 import com.lucasmoraist.news_letter_ai.domain.model.Customer;
+import com.lucasmoraist.news_letter_ai.domain.model.Theme;
 import com.lucasmoraist.news_letter_ai.infrastructure.database.entity.CustomerEntity;
+import com.lucasmoraist.news_letter_ai.infrastructure.database.entity.ThemeEntity;
 import com.lucasmoraist.news_letter_ai.infrastructure.web.dto.CustomerDTO;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
@@ -25,7 +27,15 @@ public final class CustomerMapper {
                 customerEntity.getEmail(),
                 customerEntity.getPhoneNumber(),
                 customerEntity.getGender(),
-                customerEntity.getIsActive()
+                customerEntity.getIsActive(),
+                customerEntity.getThemes()
+                        .stream()
+                        .map(c -> new Theme(
+                                c.getId(),
+                                c.getName(),
+                                null
+                        ))
+                        .toList()
         );
     }
 
@@ -36,7 +46,15 @@ public final class CustomerMapper {
                 customerDTO.email(),
                 customerDTO.phoneNumber(),
                 customerDTO.gender(),
-                false
+                false,
+                customerDTO.desiredThemes()
+                        .stream()
+                        .map(c -> new Theme(
+                                null,
+                                c.name(),
+                                null
+                        ))
+                        .toList()
         );
     }
 
@@ -47,7 +65,15 @@ public final class CustomerMapper {
                 customer.email(),
                 customer.phoneNumber(),
                 customer.gender(),
-                customer.isActive()
+                customer.isActive(),
+                customer.themes()
+                        .stream()
+                        .map(c -> new ThemeEntity(
+                                c.id(),
+                                c.name(),
+                                null
+                        ))
+                        .toList()
         );
     }
 
