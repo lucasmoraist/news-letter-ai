@@ -6,6 +6,7 @@ import com.lucasmoraist.news_letter_ai.domain.exceptions.UniqueException;
 import com.lucasmoraist.news_letter_ai.domain.model.Customer;
 import com.lucasmoraist.news_letter_ai.infrastructure.database.entity.CustomerEntity;
 import com.lucasmoraist.news_letter_ai.infrastructure.database.repository.CustomerRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,6 +25,7 @@ public class CustomerPersistenceImpl implements CustomerPersistence {
     }
 
     @Override
+    @Transactional
     public Customer saveCustomer(Customer customer) {
         try {
             log.info("Saving customer with email [{}]", customer.email());

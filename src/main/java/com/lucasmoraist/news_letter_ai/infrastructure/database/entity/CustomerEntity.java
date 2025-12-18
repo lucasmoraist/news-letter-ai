@@ -1,7 +1,7 @@
 package com.lucasmoraist.news_letter_ai.infrastructure.database.entity;
 
 import com.lucasmoraist.news_letter_ai.domain.enums.GenderEnum;
-import com.lucasmoraist.news_letter_ai.domain.enums.ThemeEnum;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class CustomerEntity {
     private GenderEnum gender;
     private Boolean isActive;
 
-    @OneToMany(mappedBy = "customer")
-    private List<ThemeEntity> themes;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ThemeEntity> themes = new ArrayList<>();
 
 }

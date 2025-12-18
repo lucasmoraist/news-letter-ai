@@ -9,6 +9,7 @@ import com.lucasmoraist.news_letter_ai.infrastructure.web.dto.CustomerDTO;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Safelist;
 
+import java.util.List;
 import java.util.regex.Pattern;
 
 public final class CustomerMapper {
@@ -30,9 +31,9 @@ public final class CustomerMapper {
                 customerEntity.getIsActive(),
                 customerEntity.getThemes()
                         .stream()
-                        .map(c -> new Theme(
-                                c.getId(),
-                                c.getName(),
+                        .map(customer -> new Theme(
+                                customer.getId(),
+                                customer.getName(),
                                 null
                         ))
                         .toList()
@@ -49,9 +50,9 @@ public final class CustomerMapper {
                 false,
                 customerDTO.desiredThemes()
                         .stream()
-                        .map(c -> new Theme(
+                        .map(customer -> new Theme(
                                 null,
-                                c.name(),
+                                customer.name(),
                                 null
                         ))
                         .toList()
@@ -59,22 +60,24 @@ public final class CustomerMapper {
     }
 
     public static CustomerEntity toEntity(Customer customer) {
-        return new CustomerEntity(
-                customer.id(),
-                validateName(customer.name()),
-                customer.email(),
-                customer.phoneNumber(),
-                customer.gender(),
-                customer.isActive(),
-                customer.themes()
-                        .stream()
-                        .map(c -> new ThemeEntity(
-                                c.id(),
-                                c.name(),
-                                null
-                        ))
-                        .toList()
-        );
+        CustomerEntity entity = new CustomerEntity();
+        entity.setId(customer.id());
+        entity.setName(customer.name());
+        entity.setEmail(customer.email());
+        entity.setPhoneNumber(customer.phoneNumber());
+        entity.setGender(customer.gender());
+        entity.setIsActive(customer.isActive());
+        if (customer.themes() != null) {
+            List<ThemeEntity> themes = customer.themes().stream().map(t -> {
+                ThemeEntity te = new ThemeEntity();
+                te.setId(t.id());
+                te.setName(t.name());
+                te.setCustomer(entity);
+                return te;
+            }).toList();
+            entity.setThemes(themes);
+        }
+        return entity;
     }
 
     private static String validateName(String name) {
