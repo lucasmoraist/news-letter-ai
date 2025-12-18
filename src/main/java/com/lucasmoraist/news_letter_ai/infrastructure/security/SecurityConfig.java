@@ -5,6 +5,7 @@ import com.lucasmoraist.news_letter_ai.infrastructure.security.properties.AppPro
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -31,6 +32,7 @@ public class SecurityConfig {
     private final RateLimiterFilter rateLimiterFilter;
 
     @Bean
+    @Profile("!default")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
@@ -51,6 +53,18 @@ public class SecurityConfig {
                         )
                 )
                 .addFilterBefore(rateLimiterFilter, SecurityContextHolderFilter.class)
+                .build();
+    }
+
+    @Bean
+    @Profile("default")
+    public SecurityFilterChain securityFilterChainDefault(HttpSecurity http) {
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .headers(headers -> headers
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin)
+                )
                 .build();
     }
 
