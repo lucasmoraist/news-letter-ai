@@ -6,11 +6,9 @@ import com.lucasmoraist.news_letter_ai.domain.exceptions.UniqueException;
 import com.lucasmoraist.news_letter_ai.domain.model.Customer;
 import com.lucasmoraist.news_letter_ai.infrastructure.database.entity.CustomerEntity;
 import com.lucasmoraist.news_letter_ai.infrastructure.database.repository.CustomerRepository;
-import jakarta.transaction.Transactional;
-import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,22 +25,30 @@ public class CustomerPersistenceImpl implements CustomerPersistence {
     @Override
     @Transactional
     public Customer saveCustomer(Customer customer) {
-        try {
-            log.info("Saving customer with email [{}]", customer.email());
-            CustomerEntity customerEntity = CustomerMapper.toEntity(customer);
-            return CustomerMapper.toDomain(this.repository.save(customerEntity));
-        } catch (ConstraintViolationException | DataIntegrityViolationException ex) {
-            log.error("Email [{}] is already registered", customer.email());
-            throw new UniqueException("Email already registered", ex);
-        }
+        emailAlreadyExists(customer.email());
+        log.info("Saving customer with email [{}]", customer.email());
+
+        CustomerEntity customerEntity = CustomerMapper.toEntity(customer);
+        CustomerEntity customerSaved = this.repository.save(customerEntity);
+
+        return CustomerMapper.toDomain(customerSaved);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Customer> findAllCustomers() {
         return this.repository.findAll()
                 .stream()
                 .map(CustomerMapper::toDomain)
                 .toList();
+    }
+
+    private void emailAlreadyExists(String email) {
+        this.repository.findByEmail(email)
+                .ifPresent(c -> {
+                    log.error("Email [{}] is already registered", c.getEmail());
+                    throw new UniqueException("Email already exists: " + c.getEmail());
+                });
     }
 
 }
