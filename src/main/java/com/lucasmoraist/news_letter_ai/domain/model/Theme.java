@@ -4,7 +4,8 @@ import java.util.UUID;
 
 public record Theme(
         UUID id,
-        String name
+        String name,
+        Customer customer
 ) {
 
 }
