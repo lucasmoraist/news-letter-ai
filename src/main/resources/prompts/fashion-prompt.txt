@@ -1,6 +1,6 @@
-Busque exatamente 5 notícias completas, publicadas no dia anterior, relacionadas ao tema entretenimento (cinema, séries, streaming, música, celebridades, cultura pop, eventos culturais, premiações, lançamentos, games, entretenimento digital, etc.).
+Busque exatamente 5 notícias completas, publicadas no dia anterior, relacionadas ao mundo da moda (tendências, desfiles, semanas de moda, marcas e estilistas, luxo, streetwear, sustentabilidade, indústria têxtil, colaborações, mercado fashion, comportamento e consumo, etc.).
 
-As notícias devem ser completas e bem desenvolvidas, com contexto, relevância cultural e impacto no público ou na indústria do entretenimento, fornecendo informações suficientes para informar assinantes, evitando resumos superficiais.
+As notícias devem ser completas e bem desenvolvidas, com contexto, relevância cultural e impacto na indústria da moda, fornecendo informações suficientes para informar assinantes, evitando resumos superficiais.
 
 Retorne o resultado obrigatoriamente em formato de lista, onde cada item da lista deve conter exatamente os seguintes campos:
 
