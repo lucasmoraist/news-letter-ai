@@ -2,8 +2,8 @@ package com.lucasmoraist.news_letter_ai.application.usecases.customer;
 
 import com.lucasmoraist.news_letter_ai.application.gateway.CustomerPersistence;
 import com.lucasmoraist.news_letter_ai.application.mapper.CustomerMapper;
-import com.lucasmoraist.news_letter_ai.domain.enums.GenderEnum;
 import com.lucasmoraist.news_letter_ai.domain.model.Customer;
+import com.lucasmoraist.news_letter_ai.factory.CustomerFactory;
 import com.lucasmoraist.news_letter_ai.infrastructure.web.dto.CustomerDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,12 +26,8 @@ class CreateCustomerCaseTest {
     @Test
     @DisplayName("Should create a customer successfully")
     void case01() {
-        CustomerDTO dto = new CustomerDTO(
-                "John Doe",
-                "johndoe@email.com",
-                "1234567890",
-                GenderEnum.MALE
-        );
+        CustomerDTO dto = CustomerFactory.createDTO();
+
         Customer customer = CustomerMapper.toDomain(dto);
 
         createCustomerCase.execute(customer);

@@ -12,7 +12,7 @@ class NewsLetterAiApplicationTests {
 
 	@Test
 	void contextLoads() {
-        assertDoesNotThrow(() -> NewsLetterAiApplication.main(new String[0]));
+        assertDoesNotThrow(() -> NewsLetterAiApplication.main(new String[] {"--spring.profiles.active=test"}));
 	}
 
 }

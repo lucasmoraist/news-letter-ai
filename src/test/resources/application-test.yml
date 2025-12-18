@@ -21,3 +21,7 @@ secrets:
   google:
     genai:
       api-key: $123456789-test-google-genai-api-key
+
+app:
+  security-ignore:
+    customerSave: /api/v1/customer/save
