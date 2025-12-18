@@ -4,12 +4,8 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
-    username: sa
-    password: password
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
 
@@ -17,7 +13,3 @@ spring:
 logging:
   level:
     com.lucasmoraist: DEBUG
-
-app:
-  security-ignore:
-    sentNotice: /api/v1/notices/sent
