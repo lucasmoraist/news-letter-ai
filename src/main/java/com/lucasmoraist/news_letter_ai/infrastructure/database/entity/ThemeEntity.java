@@ -26,7 +26,6 @@ public class ThemeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @Column(unique = true)
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
