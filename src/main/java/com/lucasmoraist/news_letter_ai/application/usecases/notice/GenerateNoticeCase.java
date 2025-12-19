@@ -1,0 +1,29 @@
+package com.lucasmoraist.news_letter_ai.application.usecases.notice;
+
+import com.lucasmoraist.news_letter_ai.application.gateway.GenAIGateway;
+import com.lucasmoraist.news_letter_ai.application.utils.PromptUtils;
+import org.springframework.cache.annotation.Cacheable;
+
+import java.time.LocalDate;
+
+public class GenerateNoticeCase {
+
+    private final GenAIGateway genAIGateway;
+
+    public GenerateNoticeCase(GenAIGateway genAIGateway) {
+        this.genAIGateway = genAIGateway;
+    }
+
+    @Cacheable(
+            value = "gemini-investment-news",
+            key = "'daily-news'"
+    )
+    public String execute() {
+        final String loadPrompt = PromptUtils.loadPromptTemplate("prompts/finance-prompt.txt");
+        final LocalDate yesterday = LocalDate.now().minusDays(1);
+        final String prompt = loadPrompt.replace("{{DATE}}", yesterday.toString());
+
+        return genAIGateway.sendPromptToGemini(prompt);
+    }
+
+}
