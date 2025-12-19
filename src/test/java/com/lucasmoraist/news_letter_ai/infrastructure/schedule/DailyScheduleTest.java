@@ -1,9 +1,9 @@
 package com.lucasmoraist.news_letter_ai.infrastructure.schedule;
 
+import com.lucasmoraist.news_letter_ai.application.usecases.notice.GenerateNoticeCase;
 import com.lucasmoraist.news_letter_ai.application.usecases.notification.SendNotification;
 import com.lucasmoraist.news_letter_ai.domain.exceptions.ReadValueException;
 import com.lucasmoraist.news_letter_ai.domain.model.Notice;
-import com.lucasmoraist.news_letter_ai.infrastructure.genai.GeminiService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.*;
 class DailyScheduleTest {
 
     @Mock
-    GeminiService geminiService;
+    GenerateNoticeCase generateNoticeCase;
     @Mock
     SendNotification sendNotification;
     @InjectMocks
@@ -31,7 +31,7 @@ class DailyScheduleTest {
     @Test
     @DisplayName("Should parse generated notices and call send notification")
     void case01() {
-        when(geminiService.generateNotices()).thenReturn("```json\n[{\"title\":\"exemplo\"}]\n```");
+        when(generateNoticeCase.execute()).thenReturn("```json\n[{\"title\":\"exemplo\"}]\n```");
 
         dailySchedule.execute();
 
@@ -49,7 +49,7 @@ class DailyScheduleTest {
     @Test
     @DisplayName("Should throw ReadValueException when generated content is invalid")
     void case02() {
-        when(geminiService.generateNotices()).thenReturn("invalid-json");
+        when(generateNoticeCase.execute()).thenReturn("invalid-json");
 
         assertThrows(ReadValueException.class, dailySchedule::execute);
 
