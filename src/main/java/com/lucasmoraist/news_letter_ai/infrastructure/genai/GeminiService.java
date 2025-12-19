@@ -4,24 +4,16 @@ import com.google.genai.Client;
 import com.google.genai.types.Content;
 import com.google.genai.types.GenerateContentResponse;
 import com.google.genai.types.Part;
+import com.lucasmoraist.news_letter_ai.application.gateway.GenAIGateway;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.resilience.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 @Log4j2
 @Service
-@Retryable(
-        delay = 10000,
-        maxRetries = 5
-)
-public class GeminiService {
+public class GeminiService implements GenAIGateway {
 
     private final Client client;
 
@@ -29,66 +21,12 @@ public class GeminiService {
         this.client = client;
     }
 
-    @Cacheable(
-            value = "gemini-investment-news",
-            key = "'daily-news'"
+    @Retryable(
+            delay = 10000,
+            maxRetries = 5
     )
-    public String generateNotices() {
-        final String prompt = loadPromptTemplate("prompts/finance-prompt.txt");
-
-        GenerateContentResponse response = sendRequestToGemini(prompt);
-
-        return response.text();
-    }
-
-
-    @Cacheable(
-            value = "gemini-investment-news-subject",
-            key = "'daily-news'"
-    )
-    public String generateSubject(String notices) {
-        final String prompt = """            
-            Com base nas noticias a seguir crie **apenas 1 título** chamativo e intrigante para adicionar no título do email 
-            
-            - Retorne como String
-            - Não inclua nenhuma explicação, prefácio ou pontuação extra.
-            
-            Notícias em JSON:
-            {{NOTICES}}
-            """;
-
-        final String promptWithNotices = prompt.replace("{{NOTICES}}", notices);
-
-        GenerateContentResponse response = sendRequestToGemini(promptWithNotices);
-
-        return response.text();
-    }
-
-    @Cacheable(
-            value = "gemini-investment-news-introduction",
-            key = "'daily-news'"
-    )
-    public String generateIntroduction(String notices) {
-        final String prompt = """            
-            Com base nas noticias a seguir crie uma introdução curta e envolvente para o email de newsletter sobre investimentos.
-            
-            - A introdução deve ser persuasiva e incentivar a leitura do restante do conteúdo.
-            - Utilize uma linguagem acessível e amigável, adequada para um público interessado em investimentos.
-            - Mantenha a introdução entre 2 a 3 frases curtas.
-            - Não inclua nenhuma explicação, prefácio ou pontuação extra.
-            
-            Notícias em JSON:
-            {{NOTICES}}
-            """;
-
-        final String promptWithNotices = prompt.replace("{{NOTICES}}", notices);
-
-        GenerateContentResponse response = sendRequestToGemini(promptWithNotices);
-
-        return response.text();
-    }
-
-    private GenerateContentResponse sendRequestToGemini(String prompt) {
+    @Override
+    public String sendPromptToGemini(String prompt) {
         log.debug("Preparing request to Gemini model...");
 
         Content content = Content.builder()
@@ -105,15 +43,7 @@ public class GeminiService {
                 );
         log.debug("Received response from Gemini model.");
 
-        return response;
-    }
-
-    private String loadPromptTemplate(String pathFile) {
-        try (InputStream in = new ClassPathResource(pathFile).getInputStream()) {
-            return new String(in.readAllBytes(), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return response.text();
     }
 
 }
