@@ -1,6 +1,9 @@
-Busque exatamente 5 notícias completas, publicadas no dia anterior, relacionadas ao tema investimentos (mercado financeiro, renda fixa, renda variável, economia, juros, bolsa de valores, fundos de investimento, CDI, SELIC, Tesouro Direto, etc.).
+Busque exatamente 5 notícias completas, publicadas no dia anterior ({{DATE}}), relacionadas ao tema investimentos
+(mercado financeiro, renda fixa, renda variável, economia, juros, bolsa de valores, fundos de investimento, CDI, SELIC,
+Tesouro Direto, etc.).
 
-As notícias devem ser completas e bem desenvolvidas, com contexto, impacto no mercado e informações suficientes para informar assinantes, evitando resumos superficiais.
+As notícias devem ser completas e bem desenvolvidas, com contexto, impacto no mercado e informações suficientes para informar
+assinantes, evitando resumos superficiais.
 
 Retorne o resultado obrigatoriamente em formato de lista, onde cada item da lista deve conter exatamente os seguintes campos:
 
