@@ -1,0 +1,7 @@
+Com base nas noticias a seguir crie **apenas 1 título** chamativo e intrigante para adicionar no título do email
+
+- Retorne como String
+- Não inclua nenhuma explicação, prefácio ou pontuação extra.
+
+Notícias em JSON:
+{{NOTICES}}

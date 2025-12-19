@@ -1,0 +1,9 @@
+Com base nas noticias a seguir crie uma introdução curta e envolvente para o email de newsletter sobre investimentos.
+
+- A introdução deve ser persuasiva e incentivar a leitura do restante do conteúdo.
+- Utilize uma linguagem acessível e amigável, adequada para um público interessado em investimentos.
+- Mantenha a introdução entre 2 a 3 frases curtas.
+- Não inclua nenhuma explicação, prefácio ou pontuação extra.
+
+Notícias em JSON:
+{{NOTICES}}
