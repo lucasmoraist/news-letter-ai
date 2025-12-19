@@ -3,10 +3,10 @@ package com.lucasmoraist.news_letter_ai.infrastructure.schedule;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lucasmoraist.news_letter_ai.application.usecases.notice.GenerateNoticeCase;
 import com.lucasmoraist.news_letter_ai.application.usecases.notification.SendNotification;
 import com.lucasmoraist.news_letter_ai.domain.exceptions.ReadValueException;
 import com.lucasmoraist.news_letter_ai.domain.model.Notice;
-import com.lucasmoraist.news_letter_ai.infrastructure.genai.GeminiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DailySchedule {
 
-    private final GeminiService geminiService;
+    private final GenerateNoticeCase generateNoticeCase;
     private final SendNotification sendNotification;
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -27,7 +27,7 @@ public class DailySchedule {
     public void execute() {
         log.info("Initiating daily newsletter generation process...");
 
-        String generatedContent = geminiService.generateNotices()
+        String generatedContent = generateNoticeCase.execute()
                 .replace("```json", "")
                 .replace("```", "")
                 .trim();
