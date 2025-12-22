@@ -1,0 +1,32 @@
+Gere exatamente 5 notícias reais, do dia anterior ({{DATE}}), atuais e verificáveis sobre {{THEME}} com foco em informações simples, diretas e rápidas de ler.
+
+O conteúdo deve ser acessível para quem está começando agora, mas ao mesmo tempo agregar valor para pessoas experientes da área, trazendo contexto claro e impacto prático.
+
+⚠️ Regras obrigatórias:
+
+Retorne exatamente 5 itens
+
+Não inclua campos extras além dos especificados
+
+Não inclua explicações, comentários ou qualquer texto fora da lista
+
+Não utilize placeholders ou textos genéricos
+
+As notícias devem ser reais e verificáveis, com URL funcional da fonte original
+
+O texto deve ser objetivo, claro e de leitura rápida
+
+📌 Formato de saída obrigatório (JSON):
+
+[
+    {
+        "title": "Título claro e objetivo da notícia",
+        "content": "Resumo curto e direto, explicando o que aconteceu, por que importa e qual o impacto prático.",
+        "originalUrl": "https://site-da-noticia.com/link-completo",
+        "publicationDate": "YYYY-MM-DD",
+        "createdAt": "YYYY-MM-DDTHH:MM:SS"
+    }
+]
+
+
+⚠️ Não altere o formato, não adicione texto antes ou depois do JSON e não quebre as regras acima.
