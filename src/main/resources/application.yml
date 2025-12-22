@@ -23,5 +23,3 @@ app:
     actuatorLiveness: /actuator/health/liveness
     actuatorReadiness: /actuator/health/readiness
     customerSave: /api/v1/customer/save
-    registerView: /register
-    registerViewDefault: /
